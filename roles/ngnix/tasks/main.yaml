@@ -1,0 +1,14 @@
+---
+  - name: Ngnix
+    apt:
+        name: ngnix
+  - name: ngnix conf
+    copy:
+        src: default
+        dest: /etc/ngnix/sites-enabled/default
+        mode: 0644
+  - name: ngnix service
+    service: 
+        name: ngnix
+        state: started
+        enabled: yes

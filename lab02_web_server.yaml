@@ -1,0 +1,10 @@
+---
+    - name: setup
+      hosts: web_servers
+      become: yes
+
+      roles:
+        - users
+        - ngnix
+    
+

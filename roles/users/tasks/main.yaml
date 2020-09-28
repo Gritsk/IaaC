@@ -1,0 +1,22 @@
+---
+  - include_vars: users.yaml
+
+  - name: add roman and hudo
+    group:
+        name: sysadmins
+        state: present
+  - name: add admin users
+    user:
+        group: sysadmins
+        name: "{{ item.username }}" 
+    with_items: "{{ sysadmins }}"
+
+  - name: add ssh keys
+    authorized_key:
+        user: "{{ item.username }}"
+        key: "{{ 'https://github.com/' + item.username + '.keys' }}"
+    with_items: "{{ sysadmins }}"
+
+
+
+
