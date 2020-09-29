@@ -1,14 +1,27 @@
 ---
-  - name: Ngnix
-    apt:
-        name: ngnix
-  - name: ngnix conf
-    copy:
-        src: default
-        dest: /etc/ngnix/sites-enabled/default
-        mode: 0644
-  - name: ngnix service
+  - name: nginx
+    apt: 
+      name: nginx
+      #state: started
+      update_cache: true
+  - name: start nginx
     service: 
-        name: ngnix
-        state: started
-        enabled: yes
+      name: nginx
+      state: started
+  - name: copy config file 
+    copy:
+      src: index.html
+      dest: /opt/foo/
+  - name: restart nginx
+    service: 
+      name: nginx
+      state: restarted
+      enabled: yes
+
+
+
+  
+  
+
+  
+ 
