@@ -12,11 +12,7 @@
     copy:
       src: index.html
       dest: /opt/foo/
-  - name: restart nginx
-    service: 
-      name: nginx
-      state: restarted
-      enabled: yes
+  
 
 
 

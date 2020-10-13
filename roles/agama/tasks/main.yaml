@@ -1,0 +1,10 @@
+---
+  - name: add user agame
+    shell: |
+      useradd agama
+      mkdir /opt/agama
+      chown agama:agama /opt/agama
+  - name: install agama
+    apt:
+      name: python3-flask-sqlalchemy
+      update_cache: true
