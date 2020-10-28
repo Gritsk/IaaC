@@ -4,7 +4,16 @@
       useradd agama
       mkdir /opt/agama
       chown agama:agama /opt/agama
-  - name: install agama
+  - name: install dependency
     apt:
       name: python3-flask-sqlalchemy
       update_cache: true
+
+  - name: Download Agama
+    get_url:
+      url: https://raw.githubusercontent.com/hudolejev/agama/master/agama.py
+      dest: /opt/agama/
+      owner: agama
+      group: agama
+      mode: '0755'
+

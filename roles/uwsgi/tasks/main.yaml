@@ -1,1 +1,27 @@
 ---
+ - name: install uwsgi
+   apt:
+     name:
+      - uwsgi
+      - uwsgi-plugin-python3
+     state: latest
+
+ - name: insall DB
+   apt:
+     name: python3-pymysql
+     state: latest
+
+ - name: change config file 
+   template:
+    src: agama.ini
+    dest: /etc/uwsgi/apps-enabled/agama.ini
+   notify: Restart uwsgi
+ - name: uwsgi always should be started
+   service:
+      name: uwsgi
+      state: started
+      enabled: yes
+
+   
+
+

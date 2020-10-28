@@ -11,7 +11,7 @@
   - name: copy config file 
     copy:
       src: index.html
-      dest: /opt/foo/
+      dest: /var/www/html
   
 
 
