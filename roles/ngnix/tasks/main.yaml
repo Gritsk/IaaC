@@ -2,16 +2,19 @@
   - name: nginx
     apt: 
       name: nginx
-      #state: started
       update_cache: true
   - name: start nginx
     service: 
       name: nginx
-      state: started
-  - name: copy config file 
+      state: started 
+      
+
+  - name: change config
     copy:
-      src: index.html
-      dest: /var/www/html
+      src: default.conf
+      dest: /etc/nginx/sites-available/default
+    notify: Restart Nginx
+    
   
 
 

@@ -5,6 +5,7 @@
       - uwsgi
       - uwsgi-plugin-python3
      state: latest
+     update_cache: true
 
  - name: insall DB
    apt:
