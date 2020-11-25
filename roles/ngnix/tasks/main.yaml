@@ -1,14 +1,22 @@
 ---
-  - name: nginx
-    apt: 
-      name: nginx
-      update_cache: true
-  - name: start nginx
-    service: 
-      name: nginx
-      state: started 
-      
+  # - name: nginx
+  #   apt: 
+  #     name: nginx
+  #     update_cache: true
+  # - name: start nginx
+  #   service: 
+  #     name: nginx
+  #     state: started 
 
+  # - name: change default web page
+  #   copy:
+  #     src: index.html
+  #     dest: /var/www/html/
+  # - name: restart nginx
+  #   service:
+  #       name: nginx
+  #       state: restarted
+  #       enabled: yes
   - name: change config
     copy:
       src: default.conf
