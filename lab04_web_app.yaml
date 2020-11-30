@@ -6,13 +6,13 @@
       - mysql
 
 
-  # - name: agama
-  #   hosts: app_servers
-  #   remote_user: ubuntu
-  #   become: yes
+  - name: agama
+    hosts: app_servers
+    remote_user: ubuntu
+    become: yes
 
-  #   roles: 
-  #     - agama
-  #     - uwsgi
-  #     - ngnix
+    roles: 
+      - agama
+      - uwsgi
+      - ngnix
 
