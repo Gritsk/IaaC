@@ -18,7 +18,7 @@
   #       state: restarted
   #       enabled: yes
   - name: change config
-    copy:
+    template:
       src: default.conf
       dest: /etc/nginx/sites-available/default
     notify: Restart Nginx

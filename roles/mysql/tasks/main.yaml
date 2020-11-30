@@ -1,0 +1,31 @@
+---
+- name: install mysql
+  apt:
+    name: mysql-server
+    state: latest
+- name: change mysql config
+  template:
+    src: override.cnf
+    dest: /etc/mysql/mysql.conf.d/
+  notify:
+    restart mysql
+- name: Install PyMySQL for MySQL
+  apt: 
+    name: python3-pymysql
+    state: latest
+- name: MySQL database
+  mysql_db:
+    name: "{{ mysql_database }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+- name : mysql user
+  mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: "{{ mysql_database }}.*:ALL"
+    host: "%"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+
+
+
+      
