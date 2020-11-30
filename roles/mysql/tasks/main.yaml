@@ -3,3 +3,10 @@
   apt:
     name: mysql-server
     state: latest
+- name: change mysql config
+  template:
+    src: override.cnf
+    dest: /etc/mysql/mysql.conf.d/
+  notify:
+    restart mysql
+      
