@@ -1,3 +1,7 @@
+acl allowed_networks { {%- for n in allowed_networks%}
+                        {{ n }};
+                     {%- endfor %}
+                     };
 options {
 	directory "/var/cache/bind";
 
