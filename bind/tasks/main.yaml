@@ -4,3 +4,8 @@
     name: bind9
     state: latest
     update_cache: yes
+- name: change config
+  template:
+      dest: /etc/bind/named.conf.options
+      src: named.conf.options.j2
+  notify: restart bind
