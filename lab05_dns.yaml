@@ -1,4 +1,8 @@
 ---
+- name: Gather facts
+  hosts: all
+  tasks:
+    - setup:
 - name: install bind9
   hosts: dns_server
   become: yes

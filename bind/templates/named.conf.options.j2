@@ -18,3 +18,7 @@ options {
 	auth-nxdomain no;    # conform to RFC1035
 	
 };
+zone "covid20.io" {
+     type master;
+     file "/etc/bind/db.covid20";
+};
