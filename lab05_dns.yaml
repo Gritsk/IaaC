@@ -1,0 +1,6 @@
+---
+- name: install bind9
+  hosts: dns_server
+  become: yes
+  roles:
+    - bind

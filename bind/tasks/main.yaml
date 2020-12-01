@@ -1,0 +1,6 @@
+---
+- name: Install Bind9 DNS
+  apt: 
+    name: bind9
+    state: latest
+    update_cache: yes
