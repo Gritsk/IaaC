@@ -1,0 +1,24 @@
+acl allowed_networks { {%- for n in allowed_networks%}
+                        {{ n }};
+                     {%- endfor %}
+                     };
+options {
+	directory "/var/cache/bind";
+
+	forwarders {
+        {%- for f in dns_forwarders%}
+            {{ f }};
+
+        {%- endfor%}
+	   
+	 };
+
+	dnssec-validation no;
+
+	auth-nxdomain no;    # conform to RFC1035
+	
+};
+zone "covid20.io" {
+     type master;
+     file "/etc/bind/db.covid20";
+};

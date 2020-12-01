@@ -1,0 +1,17 @@
+---
+- name: Install Bind9 DNS
+  apt: 
+    name: bind9
+    state: latest
+    update_cache: yes
+- name: change config
+  template:
+      dest: /etc/bind/named.conf.options
+      src: named.conf.options.j2
+  notify: restart bind
+- name: confid master zone
+  template:
+      dest: /etc/bind/db.covid20
+      src: db.covid20.j2
+  notify:
+    reload rndc

@@ -1,0 +1,15 @@
+---
+- name: Gather facts
+  hosts: all
+  tasks:
+    - setup:
+- name: install bind9
+  hosts: dns_server
+  become: yes
+  roles:
+    - bind
+- name: update vms dns settings
+  hosts: dns_config
+  become: yes
+  roles:
+   - dns

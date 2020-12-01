@@ -11,3 +11,10 @@ my_vm
 
 [db_servers]
 my_vm_2
+
+[dns_server]
+my_vm_2
+
+[dns_config]
+my_vm
+my_vm_2
