@@ -8,3 +8,8 @@
   become: yes
   roles:
     - bind
+- name: update vms dns settings
+  hosts: dns_config
+  become: yes
+  roles:
+   - dns
