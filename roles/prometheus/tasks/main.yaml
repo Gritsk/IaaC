@@ -2,3 +2,35 @@
 - name: Package
   apt:
     name: prometheus
+    update_cache: yes
+
+- name: cp service config file
+  copy:
+    src: /lib/systemd/system/prometheus.service
+    dest: /etc/systemd/system/
+    remote_src: yes
+- name: Prometheus reachable from outside
+  lineinfile:
+    dest: /etc/systemd/system/prometheus.service
+    regex: 'ExecStart='
+    line: "ExecStart=/usr/bin/prometheus $ARGS --web.external-url=http://vm1.{{ domain }}:12580/prometheus"
+    state: present
+  notify: Restart Prometheus
+
+
+- name: Configure Prometheus
+  template:
+    src: prometheus.yaml.j2
+    dest: /etc/prometheus/prometheus.yml
+  notify: Restart Prometheus
+
+- name: reverse proxy on Prometheus VM
+  template:
+    src: default.j2
+    dest: /etc/nginx/sites-available/default
+  notify: Restart Nginx
+
+
+
+
+
