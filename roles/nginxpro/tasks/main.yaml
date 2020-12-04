@@ -1,0 +1,12 @@
+---
+  - name: nginx
+    apt: 
+      name: nginx
+      update_cache: true
+
+
+  - name: change conf and add metrics path to it
+    template:
+        dest: /etc/nginx/sites-enabled/default
+        src: default.j2
+    notify: Restart Nginx

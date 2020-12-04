@@ -1,0 +1,9 @@
+
+server {
+	listen 80 default_server;
+        listen [::]:80 default_server;
+
+        location /metrics {
+		proxy_pass http://vm2.{{ domain }}:9100/metrics;
+	}
+}
