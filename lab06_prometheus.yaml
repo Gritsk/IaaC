@@ -1,0 +1,20 @@
+---
+- name: prometheus-node-exporters
+  hosts: all
+  become: yes
+  roles:
+    - node_exporter
+
+
+- name: install prometheus on vm1
+  hosts: prometheus
+  become: yes
+  roles:
+    - prometheus
+
+- name: config ngnix on second vm
+  hosts: dns_server
+  become: yes
+  roles: 
+    - nginxpro
+

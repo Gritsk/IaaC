@@ -1,0 +1,17 @@
+server {
+	listen 80 default_server;
+	server_name _;
+
+	location / {
+		uwsgi_pass {{ uwsgi_addr }};
+		include uwsgi_params;
+	}
+    location /metrics {
+		proxy_pass http://vm1.{{ domain }}:9100/metrics;
+	}
+
+    location /prometheus {
+            proxy_pass http://vm1.{{ domain }}:9090;
+    }
+
+}

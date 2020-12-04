@@ -1,4 +1,4 @@
-mysql_host: 192.168.42.199
+mysql_host: 192.168.42.40
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -18,6 +18,8 @@ dns_forwarders:
 allowed_networks:     
   - 192.168.42.0/24 
   - 127.0.0.0/8
+
+domain: covid20.io
 
 
 

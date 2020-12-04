@@ -9,9 +9,9 @@
   #     state: started 
 
   # - name: change default web page
-  #   copy:
+  #   template:
   #     src: index.html
-  #     dest: /var/www/html/
+  #     dest: /var/www/
   # - name: restart nginx
   #   service:
   #       name: nginx
