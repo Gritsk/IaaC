@@ -5,3 +5,11 @@
   become: yes
   roles:
     - bind_exporter
+- name: set up mysqls bind_exporter
+  hosts: db_servers
+  become: yes
+  gather_facts: no
+  roles:
+    - mysql_exporter
+  tags:
+    - mysql
