@@ -13,3 +13,11 @@
     - mysql_exporter
   tags:
     - mysql
+- name: nginx exporter
+  hosts: all
+  become: yes
+  gather_facts: no
+  roles:
+    - nginx_exporter
+  tags: 
+    - nginx

@@ -11,6 +11,7 @@ mysql_password: !vault |
 
 
 uwsgi_addr: 127.0.0.1:5000
+localhost: http://127.0.0.1
 
 dns_forwarders:
   - 1.1.1.1

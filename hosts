@@ -21,5 +21,12 @@ vm2
 
 [prometheus]
 vm1
+[node_exporters]
+vm1
+vm2
+
+[grafana]
+vm1
+
 
 
