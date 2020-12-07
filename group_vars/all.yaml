@@ -22,4 +22,19 @@ allowed_networks:
 domain: covid20.io.
 
 
+prometheus_jobs:
+  - name: node
+    targets: "{{ groups['all'] }}"
+    port: 9100
+  - name: bind
+    targets: "{{ groups['dns_server'] }}"
+    port: 9119
+  - name: mysql
+    targets: "{{ groups['db_servers'] }}"
+    port: 9104
+  - name: nginx
+    targets: "{{ groups['web_servers'] }}"
+    port: 9113
+
+
 

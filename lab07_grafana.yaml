@@ -1,0 +1,7 @@
+---
+- name: set up bind bind_exporter
+  hosts: dns_server
+  gather_facts: no
+  become: yes
+  roles:
+    - bind_exporter
