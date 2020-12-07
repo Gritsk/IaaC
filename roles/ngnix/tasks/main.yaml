@@ -1,12 +1,12 @@
 ---
-  # - name: nginx
-  #   apt: 
-  #     name: nginx
-  #     update_cache: true
-  # - name: start nginx
-  #   service: 
-  #     name: nginx
-  #     state: started 
+  - name: nginx
+    apt: 
+      name: nginx
+      update_cache: true
+  - name: start nginx
+    service: 
+      name: nginx
+      state: started
 
   # - name: change default web page
   #   template:
@@ -20,7 +20,7 @@
   - name: change config
     template:
       src: default.conf
-      dest: /etc/nginx/sites-available/default
+      dest: /etc/nginx/sites-enabled/default
     notify: Restart Nginx
     
   
