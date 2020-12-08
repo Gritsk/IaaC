@@ -6,8 +6,10 @@ vm2 ansible_host=193.40.156.86 ansible_port=4022 ansible_ssh_user=ubuntu ansible
 
 [web_servers]
 vm1
+vm2
 [app_servers]
 vm1
+vm2
 
 [db_servers]
 vm2
