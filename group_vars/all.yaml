@@ -20,7 +20,8 @@ allowed_networks:
   - 192.168.42.0/24 
   - 127.0.0.0/8
 
-domain: covid20.io.
+domain: covid20
+top_level_domain: .io.
 
 
 prometheus_jobs:

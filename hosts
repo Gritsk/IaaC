@@ -29,6 +29,10 @@ vm2
 
 [grafana]
 vm1
+[influxdb]
+vm2
 
+[pinger]
+vm2
 
 
