@@ -1,0 +1,10 @@
+--- 
+- name: install rsyslog
+  apt:
+    name: rsyslog
+    state: latest
+- name: rsyslog config
+  template:
+      dest: /etc/rsyslog.d/51-telegraf.conf
+      src: 51-telegraf.conf.j2
+  notify: Restart Rsyslog

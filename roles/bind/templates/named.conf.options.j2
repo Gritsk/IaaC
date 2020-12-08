@@ -18,10 +18,18 @@ options {
 	auth-nxdomain no;    # conform to RFC1035
 	
 };
-zone "covid20.io" {
+zone {{ domain }}{{ top_level_domain }} {
      type master;
-     file "/etc/bind/db.covid20";
+     file "/etc/bind/db.{{ domain }}";
 };
+{% for vm in groups['all'] %}
+	zone "{{ hostvars[vm]['inventory_hostname'] }}." {
+     	     type master;
+     	     file "/etc/bind/db.{{ hostvars[vm]['inventory_hostname'] }}";
+};
+{% endfor %}
+
+
 statistics-channels {
   inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
 };

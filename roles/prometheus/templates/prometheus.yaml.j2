@@ -4,7 +4,7 @@ scrape_configs:
     static_configs:
       - targets:
 {% for target in job['targets'] %}
-        - {{ target }}.{{ domain }}:{{ job['port'] }}
+        - {{ target }}.{{ domain }}{{ top_level_domain }}:{{ job['port'] }}
 {% endfor %}
 {% endfor %}
           
