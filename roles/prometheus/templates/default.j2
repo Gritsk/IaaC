@@ -6,20 +6,53 @@ server {
 
 	server_name _;
 
+
+	{% if inventory_hostname in groups['app_servers'] %}
 	location / {
 		uwsgi_pass {{ uwsgi_addr }};
 		include uwsgi_params;
 	}
+	{% endif %}
+	{% if inventory_hostname in groups['node_exporters'] %}
     location /metrics {
-		proxy_pass http://vm1.{{ domain }}:9100/metrics;
+		proxy_pass {{ localhost }}:9100/metrics;
 	}
+	{% endif %}
 
-    location /prometheus {
-            proxy_pass http://vm1.{{ domain }}:9090;
+	{% if inventory_hostname in groups['web_servers'] %}
+    location /nginx-metrics {
+        proxy_pass {{ localhost }}:9113/metrics;
     }
+    {% endif %}
+
+	{% if inventory_hostname in groups['db_servers'] %}
+    location /mysql-metrics {
+		proxy_pass {{localhost}}:9104/metrics;
+	}
+    {% endif %}
+	{% if inventory_hostname in groups['dns_server'] %} 
+    location /bind-metrics {
+		proxy_pass {{ localhost }}:9119/metrics;
+	}
+    {% endif %}
+
+    {% if inventory_hostname in groups['prometheus'] %}
+    location /prometheus {
+            proxy_pass {{ localhost }}:9090;
+    }
+	{% endif %}
+	{% if inventory_hostname in groups['grafana'] %}  
+    location /grafana {
+     	    proxy_pass {{ localhost }}:3000;
+	}
+    {% endif %}
+
+
+	{% if inventory_hostname in groups['web_servers'] %}
 	location /stub_status {
                 stub_status;
     }
+	{% endif %}
 
 
 }
