@@ -1,8 +1,10 @@
 scrape_configs:
-
-  - job_name: linux
+{% for job in prometheus_jobs %}
+  - job_name: {{ job['name'] }}
     static_configs:
       - targets:
-          {% for vm in groups['all'] %}
-            - {{ hostvars[vm]['inventory_hostname'] }}.{{ domain }}:9100 
-          {% endfor -%}
+{% for target in job['targets'] %}
+        - {{ target }}.{{ domain }}:{{ job['port'] }}
+{% endfor %}
+{% endfor %}
+          

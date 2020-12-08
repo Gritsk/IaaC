@@ -11,6 +11,7 @@ mysql_password: !vault |
 
 
 uwsgi_addr: 127.0.0.1:5000
+localhost: http://127.0.0.1
 
 dns_forwarders:
   - 1.1.1.1
@@ -20,6 +21,31 @@ allowed_networks:
   - 127.0.0.0/8
 
 domain: covid20.io.
+
+
+prometheus_jobs:
+  - name: node
+    targets: "{{ groups['all'] }}"
+    port: 9100
+  - name: bind
+    targets: "{{ groups['dns_server'] }}"
+    port: 9119
+  - name: mysql
+    targets: "{{ groups['db_servers'] }}"
+    port: 9104
+  - name: nginx
+    targets: "{{ groups['web_servers'] }}"
+    port: 9113
+
+
+mysql_exporter_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63653538353964396232643761623938626637326163663966633562386433393464303234386634
+          6634616164313462613664333331316330386564326366630a363661323163336164393866316362
+          61663935633538633834333635333134643536346164356530626564376533343437306164633035
+          6465373630396162330a343830613566343438363762623066663864633936656166356463363434
+          3162
+mysql_exporter_user: exporter
 
 
 

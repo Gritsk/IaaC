@@ -1,0 +1,12 @@
+---
+- name: config bin exporter
+  apt:
+    name: prometheus-bind-exporter
+    update_cache: yes
+
+- name: Enable Bind9 exporter
+  service:
+    name: prometheus-bind-exporter
+    state: started
+    enabled: yes
+
