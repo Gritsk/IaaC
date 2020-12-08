@@ -22,3 +22,7 @@ zone "covid20.io" {
      type master;
      file "/etc/bind/db.covid20";
 };
+statistics-channels {
+  inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+};
+
