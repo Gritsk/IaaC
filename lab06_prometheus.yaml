@@ -12,9 +12,5 @@
   roles:
     - prometheus
 
-- name: config ngnix on second vm
-  hosts: dns_server
-  become: yes
-  roles: 
-    - nginxpro
+
 
