@@ -1,4 +1,4 @@
-mysql_host: 192.168.42.40
+mysql_host: 192.168.42.90
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -47,6 +47,8 @@ mysql_exporter_pass: !vault |
           6465373630396162330a343830613566343438363762623066663864633936656166356463363434
           3162
 mysql_exporter_user: exporter
+
+backup_ip: 192.168.42.156
 
 
 
