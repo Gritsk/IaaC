@@ -24,6 +24,16 @@
     priv: "{{ mysql_database }}.*:ALL"
     host: "%"
     login_unix_socket: /var/run/mysqld/mysqld.sock
+    # lab11
+- name: Create MySQL replication user
+  mysql_user:
+    name: "{{ mysql_replication_user }}"
+    password: "{{ mysql_replication_pass }}"
+    priv: "*.*:REPLICATION SLAVE"
+    host: "%"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
+
 
 
 
