@@ -1,11 +1,4 @@
 ---
-# - name: Ensure backup folder exists.
-#   file:
-#     path: /home/backup
-#     state: directory
-#     owner: backup
-#     group: backup
-#     mode: 0775
 - name: Add the user "backup" and genereate its keys
   user:
     name: backup
@@ -14,12 +7,95 @@
     ssh_key_bits: 4096
     ssh_key_file: /home/backup/.ssh/id_rsa
 
-# - name: Add the user "backup" and genereate its keys
-#   user:
-#     name: backup
-#     create_home: yes
-#     generate_ssh_key: yes
-#     ssh_key_bits: 4096
-#     ssh_key_file: .ssh/id_rsa
-# sudo chown -R username:group directory
+- name: mysql backup user
+  mysql_user:
+    name: "{{ mysql_backup_user }}"
+    password: "{{ mysql_backup_pass }}"
+    priv: "{{ mysql_database }}.*:SELECT,LOCK TABLES"
+    host: "%"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
+  when: inventory_hostname == "vm2"
+- name: change cofig
+  template:
+    src: backup.my.cnf.j2
+    dest: /home/backup/.my.cnf
+    owner: backup
+    group: backup
+    mode: '0400'
+  when: inventory_hostname == "vm2"
+
+- name: Add the user to the Prometheus and Grafana groups on the VM1
+  user:
+    name: backup
+    groups: grafana,prometheus
+  when: inventory_hostname == "vm1"
+
+- name: Add the user to the InfluxDB and MySQL groups on the VM2
+  user:
+    name: backup
+    groups: mysql,influxdb
+  when: inventory_hostname == "vm2"
+
+- name: Create backup, restore and scripts directories
+  file:
+    path: /home/backup/{{ item }}
+    state: directory
+    owner: backup
+    group: backup
+    mode: '0755'
+  loop:
+    - backup
+    - restore
+    - scripts
+
+- name: Copy Grafana and Prometheus backup scripts to VM1
+  copy:
+    src: "{{ item }}"
+    dest: /home/backup/scripts/{{ item }}
+    owner: backup
+    group: backup
+    mode: '0500'
+  when: inventory_hostname == "vm1"
+  loop:
+    - grafana.sh
+    - prometheus.sh
+
+- name: Copy MySQL and InfluxDB backup scripts to VM2
+  copy:
+    src: "{{ item }}"
+    dest: /home/backup/scripts
+    owner: backup
+    group: backup
+    mode: '0500'
+  when: inventory_hostname == "vm2"
+  loop:
+    - influxdb.sh
+    - mysql.sh
+
+# Install Duplicity and copy crontabs
+
+- name: Install Duplicity
+  apt:
+    name: duplicity
+    state: latest
+
+- name: Copy crontab to VM1
+  template:
+    src: crontab.vm1.j2
+    dest: /etc/cron.d/backup
+    owner: root
+    group: root
+    mode: '0644'
+  when: inventory_hostname == "vm1"
+
+- name: Copy crontab to VM2
+  template:
+    src: crontab.vm2.j2
+    dest: /etc/cron.d/backup
+    owner: root
+    group: root
+    mode: '0644'
+  when: inventory_hostname == "vm2"
+
 
