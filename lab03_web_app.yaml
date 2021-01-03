@@ -7,5 +7,5 @@
     roles: 
       # - agama
       # - uwsgi
-      - ngnix
+      - nginx
 

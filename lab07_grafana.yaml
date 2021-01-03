@@ -21,11 +21,11 @@
     - nginx_exporter
   tags: 
     - nginx
-# - name: set up grafana
-#   hosts: grafana
-#   become: yes
-#   gather_facts: no
-#   roles:
-#     - grafana
-#   tags:
-#     - grafana
+- name: set up grafana
+  hosts: grafana
+  become: yes
+  gather_facts: no
+  roles:
+    - grafana
+  tags:
+    - grafana
