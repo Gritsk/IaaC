@@ -1,4 +1,4 @@
-mysql_host: 192.168.42.27
+mysql_host: 192.168.42.84
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -68,6 +68,11 @@ mysql_replication_pass: !vault |
           65303835383838396336393662343561613737373534343264613133646135363032373362373731
           3934343539663230650a346635626237626661636666393339633737383965383866356565646433
           3261
+
+
+docker_grafana_port: 3001
+docker_agama_port: 8000
+
 
 
 

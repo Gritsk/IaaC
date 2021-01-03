@@ -10,3 +10,5 @@ $TTL	604800
 vm1.{{ domain }}{{ top_level_domain }}		IN	A	{{ hostvars['vm1']['ansible_default_ipv4']['address'] }}
 vm2.{{ domain}}{{ top_level_domain }}		IN	A	{{ hostvars['vm2']['ansible_default_ipv4']['address'] }}
 backup.{{ domain }}{{ top_level_domain }}	IN	A	{{ backup_ip }}
+influxdb.{{ domain }}{{ top_level_domain }}			IN	CNAME	vm2.{{ domain }}{{ top_level_domain }}
+prometheus.{{ domain }}{{ top_level_domain }}			IN	CNAME	vm1.{{ domain }}{{ top_level_domain }}
