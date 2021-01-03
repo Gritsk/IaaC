@@ -9,8 +9,8 @@ server {
 
 	{% if inventory_hostname in groups['app_servers'] %}
 	location / {
-		uwsgi_pass {{ uwsgi_addr }};
-		include uwsgi_params;
+		proxy_pass http://127.0.0.1:{{ docker_agama_port }};
+
 	}
 	{% endif %}
 	{% if inventory_hostname in groups['node_exporters'] %}
@@ -43,7 +43,7 @@ server {
 	{% endif %}
 	{% if inventory_hostname in groups['grafana'] %}  
     location /grafana {
-     	    proxy_pass http://127.0.0.1:3000;
+     	    proxy_pass http://127.0.0.1:{{ docker_grafana_port }};
 	}
     {% endif %}
 

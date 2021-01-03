@@ -8,8 +8,8 @@
   gather_facts: false
   become: yes
   roles:
-    - agama
-    - uwsgi
+    # - agama
+    # - uwsgi
     - nginx
 
 - name: Setup MySQL
@@ -54,7 +54,7 @@
     - nginx_exporter
  
 - name: Setup exporter
-  hosts: dns_servers
+  hosts: dns_server
   gather_facts: false
   become: yes
   roles:
@@ -67,12 +67,12 @@
   roles:
     - mysql_exporter
 
-- name: Setup Grafana
-  hosts: grafana
-  gather_facts: false
-  become: yes
-  roles:
-    - grafana
+# - name: Setup Grafana
+#   hosts: grafana
+#   gather_facts: false
+#   become: yes
+#   roles:
+#     - grafana
 
 - name: Setup backup facility
   hosts: all

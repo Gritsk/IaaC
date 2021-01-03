@@ -5,7 +5,7 @@
     become: yes
 
     roles: 
-      - agama
-      - uwsgi
+      # - agama
+      # - uwsgi
       - ngnix
 
