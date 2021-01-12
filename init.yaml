@@ -10,7 +10,7 @@
   - name: Remove unnecessary packages
     apt:
       autoremove: yes
-  # - name: Delete backup user to ensure its successful creation
+  # - name: Delete backup 
   #   user:
   #     name: backup
   #     state: absent
