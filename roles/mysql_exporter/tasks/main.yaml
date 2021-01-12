@@ -2,7 +2,7 @@
 - name: install mysql exportert package
   apt: 
     name: prometheus-mysqld-exporter
-    update_cache: yes
+    state: latest
 
 # - name: config
 #   template:

@@ -8,7 +8,7 @@
     recurse: true
   loop:
     - /opt/docker/grafana
-    - /opt/docker/grafana-etc
+    #- /opt/docker/grafana-etc
 
 - name: Setup Grafana container
   docker_container:

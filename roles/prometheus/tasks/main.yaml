@@ -2,7 +2,7 @@
 - name: Package
   apt:
     name: prometheus
-    update_cache: yes
+    state: latest
 
 # - name: cp service config file
 #   copy:

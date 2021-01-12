@@ -4,6 +4,7 @@
     name: 
       - prometheus-node-exporter
       #- nginx
+    state: latest
 - name: waiting
   wait_for:
     timeout: 10
