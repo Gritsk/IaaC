@@ -11,3 +11,15 @@
   notify: 
     - Reload systemd
     - Restart Nginx exporter
+- name: Execute handlers 
+  meta: flush_handlers
+
+- name: waiting 
+  wait_for:
+    timeout: 10
+
+- name: Check nginx_prometheus
+  service:
+    name: nginx-prometheus-exporter
+    state: started
+    enabled: yes

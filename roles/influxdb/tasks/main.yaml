@@ -4,6 +4,7 @@
    name: 
    - influxdb
    - influxdb-client
+   state: latest
 
 - name: download telegraf
   get_url:
@@ -21,5 +22,22 @@
       src: telegraf.conf.j2
   notify: restart telegraph
 
+- name: Execute handlers 
+  meta: flush_handlers
 
+- name: waiting 
+  wait_for:
+    timeout: 10
+
+- name: Check  InfluxDB 
+  service:
+    name: influxdb
+    state: started
+    enabled: yes
+
+- name: Check Telegraf 
+  service:
+    name: telegraf
+    state: started
+    enabled: yes
 

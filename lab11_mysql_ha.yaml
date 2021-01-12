@@ -20,7 +20,7 @@
     - mysql
 
 - name: Setup DNS server
-  hosts: dns_server
+  hosts: dns_servers
   gather_facts: false
   become: yes
   roles:
@@ -54,7 +54,7 @@
     - nginx_exporter
  
 - name: Setup exporter
-  hosts: dns_server
+  hosts: dns_servers
   gather_facts: false
   become: yes
   roles:

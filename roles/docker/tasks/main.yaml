@@ -11,3 +11,16 @@
     name: docker
     state: started
     enabled: yes
+
+- name: Execute handlers 
+  meta: flush_handlers
+
+- name: waiting 
+  wait_for:
+    timeout: 10
+
+- name: Check if started
+  service:
+    name: docker
+    state: started
+    enabled: yes

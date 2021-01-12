@@ -1,6 +1,7 @@
 ---
   - name: agama
     hosts: app_servers
+    gather_facts: false
     remote_user: ubuntu
     become: yes
 

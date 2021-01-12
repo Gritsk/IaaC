@@ -18,11 +18,7 @@
   notify:
     - Restart Grafana
  
-- name: start service grafana
-  service: 
-    name: grafana-server
-    state: started
-    enabled: yes
+
 
       
 

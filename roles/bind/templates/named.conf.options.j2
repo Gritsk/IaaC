@@ -1,36 +1,33 @@
-acl allowed_networks { {%- for n in allowed_networks%}
-                        {{ n }};
-                     {%- endfor %}
-                     };
+key "{{ dns_transfer_key_name }}" {
+	algorithm hmac-sha256;
+	secret "{{ dns_transfer_key }}";
+};
+
+key "{{ dns_update_key_name }}" {
+	algorithm hmac-sha256;
+	secret "{{ dns_update_key }}";
+};
+
+acl allowed_networks { {%- for network in allowed_networks -%}
+			  {{ network }};
+			{%- endfor -%}
+};
+
 options {
-	directory "/var/cache/bind";
-
-	forwarders {
-        {%- for f in dns_forwarders%}
-            {{ f }};
-
-        {%- endfor%}
-	   
-	 };
-
-	dnssec-validation no;
-
-	auth-nxdomain no;    # conform to RFC1035
-	
+    directory "/var/cache/bind";
+    forwarders {
+      {%- for address in dns_forwarders -%}
+        {{ address }};
+      {%- endfor -%}
+    };
+    dnssec-validation no;
+    auth-nxdomain no;    # conform to RFC1053
+    listen-on-v6 { any; };
+    allow-query { allowed_networks; };
 };
-zone {{ domain }}{{ top_level_domain }} {
-     type master;
-     file "/etc/bind/db.{{ domain }}";
-};
-{% for vm in groups['all'] %}
-	zone "{{ hostvars[vm]['inventory_hostname'] }}." {
-     	     type master;
-     	     file "/etc/bind/db.{{ hostvars[vm]['inventory_hostname'] }}";
-};
-{% endfor %}
 
+#Since Lab 7 - Grafana, for bind exporter
 
 statistics-channels {
   inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
 };
-

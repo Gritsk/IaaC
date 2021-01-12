@@ -1,0 +1,15 @@
+---
+- name: Exporter packages
+  apt:
+    name: 
+      - prometheus-node-exporter
+      #- nginx
+- name: waiting
+  wait_for:
+    timeout: 10
+
+- name: Enable and start node exporters
+  service:
+    name: prometheus-node-exporter
+    state: started
+    enabled: yes

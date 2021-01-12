@@ -2,8 +2,10 @@
 - name: config bin exporter
   apt:
     name: prometheus-bind-exporter
-    update_cache: yes
-
+    state: latest
+- name: prometheus error throw skip 
+  wait_for:
+      timeout: 20
 - name: Enable Bind9 exporter
   service:
     name: prometheus-bind-exporter

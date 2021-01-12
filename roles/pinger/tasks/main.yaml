@@ -33,3 +33,16 @@
   notify: 
     - Reload systemd
     - Restart pinger
+
+- name: Execute handlers
+  meta: flush_handlers
+
+- name: waiting 
+  wait_for:
+    timeout: 10
+
+- name: Check the service 
+  service:
+    name: pinger
+    state: started
+    enabled: yes

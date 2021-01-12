@@ -1,6 +1,7 @@
 ---
   - name: database app_servers
     hosts: db_servers
+    gather_facts: false
     become: yes
     roles:
       - mysql

@@ -2,7 +2,7 @@
 - name: influxdb
   hosts: influxdb
   become: yes
-  gather_facts: no
+  gather_facts: false
   roles:
    - influxdb
 - name: pinger

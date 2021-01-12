@@ -1,7 +1,7 @@
 ---
 - name: Update Nginx configuration
   hosts: web_servers
-  gather_facts: false
+  # gather_facts: false
   become: yes
   roles:
     - nginx

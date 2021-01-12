@@ -24,6 +24,7 @@
     priv: "{{ mysql_database }}.*:ALL"
     host: "%"
     login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
     # lab11
 - name: Create MySQL replication user
   mysql_user:
@@ -33,9 +34,26 @@
     host: "%"
     login_unix_socket: /var/run/mysqld/mysqld.sock
   no_log: true
+  notify:
+    - Stop MySQL slave thread
+    - Change MySQL master thread to use replication
+    - Reset MySQL slave thread
+    - Reset MySQL slave thread
+    - Start MySQL slave thread
 
 
+- name: Execute handlers 
+  meta: flush_handlers
 
+- name: waiting 
+  wait_for:
+    timeout: 10
+
+- name: Check mysql
+  service:
+    name: mysql
+    state: started
+    enabled: yes
 
 
       

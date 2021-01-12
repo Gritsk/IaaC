@@ -8,3 +8,16 @@
       dest: /etc/rsyslog.d/51-telegraf.conf
       src: 51-telegraf.conf.j2
   notify: Restart Rsyslog
+
+- name: Execute handlers
+  meta: flush_handlers
+
+- name: waiting
+  wait_for:
+    timeout: 10
+
+- name: Check rsyslog
+  service:
+    name: rsyslog
+    state: started
+    enabled: yes

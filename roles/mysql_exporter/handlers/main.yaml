@@ -1,4 +1,6 @@
 ---
+- name: Start MySQL exporter with a new flag
+  shell: ./mysqld_exporter --config.my-cnf=/var/lib/prometheus/.my.cnf
 - name: Restart mysql_exporter
   service: 
     name: prometheus-mysqld-exporter 

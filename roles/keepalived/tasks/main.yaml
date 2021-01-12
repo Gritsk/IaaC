@@ -23,3 +23,22 @@
   notify: 
     - Reload systemd
     - Restart keepalived exporter
+
+- name: Execute handlers 
+  meta: flush_handlers
+
+- name: waiting 
+  wait_for:
+    timeout: 10
+
+- name: Check  keepalived 
+  service:
+    name: keepalived
+    state: started
+    enabled: yes
+
+- name: Check Prometheus
+  service:
+    name: keepalived-prometheus-exporter
+    state: started
+    enabled: yes

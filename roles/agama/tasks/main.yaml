@@ -1,5 +1,5 @@
 ---
-  - name: add user agame
+  - name: add user agama
     shell: |
       useradd agama
       mkdir /opt/agama

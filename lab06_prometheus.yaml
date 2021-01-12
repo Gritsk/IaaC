@@ -1,16 +1,24 @@
 ---
-- name: prometheus-node-exporters
-  hosts: all
-  become: yes
-  roles:
-    - node_exporter
-
-
-- name: install prometheus on vm1
+- name: Prometheus
   hosts: prometheus
+  gather_facts: false
   become: yes
   roles:
     - prometheus
+
+- name: Node exporters
+  hosts: node_exporters
+  gather_facts: false
+  become: yes
+  roles:
+    - node_exporters
+
+- name: Install and configure non-Prometheus VM's Nginx
+  hosts: vm2
+  gather_facts: false
+  become: yes
+  roles:
+    - nginx
 
 
 

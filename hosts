@@ -1,47 +1,70 @@
 
 
-vm1 ansible_host=193.40.156.86 ansible_port=7022 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
-vm2 ansible_host=193.40.156.86 ansible_port=8422 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
+vm1 ansible_host=193.40.156.86 ansible_port=4822 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
+vm2 ansible_host=193.40.156.86 ansible_port=6422 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
+vm3 ansible_host=193.40.156.86 ansible_port=11122 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
 
 
 [web_servers]
 vm1
 vm2
+vm3
 [app_servers]
 vm1
 vm2
 
+[internal]
+vm3
 
-[db_servers]
+[db_replicas]
+vm1
+
+[db_masters]
+vm2
+
+[db_servers:children]
+db_replicas
+db_masters
+
+
+[dns_masters]
+vm3
+
+[dns_slaves]
 vm1
 vm2
 
-[dns_server]
-vm2
+[dns_servers:children]
+dns_masters
+dns_slaves
 
 [dns_config]
 vm1
 vm2
+vm3
 
 [prometheus]
-vm1
+vm3
+
 [node_exporters]
 vm1
 vm2
+vm3
 
 [grafana]
-vm1
+vm3
+
 [influxdb]
-vm2
+vm3
 
 [pinger]
-vm2
+vm3
+
 [docker]
 vm1
 vm2
+vm3
 
 [haproxy]
 vm1
 vm2
-
-

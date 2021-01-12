@@ -17,6 +17,25 @@
       src: default.j2
       dest: /etc/nginx/sites-enabled/default
     notify: Restart Nginx
+
+  - name: Execute handlers 
+    meta: flush_handlers
+
+  - name: waiting
+    wait_for:
+      timeout: 10
+
+  - name: Check nginx
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+
+  - name: change html
+    template:
+      src: index.html.j2
+      dest: /var/www/html/index.nginx-debian.html
+    when: inventory_hostname == groups['internal'][0]
     
   
 

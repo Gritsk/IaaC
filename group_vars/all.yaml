@@ -1,4 +1,4 @@
-mysql_host: 192.168.42.84
+mysql_host: 192.168.42.64
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -12,6 +12,7 @@ mysql_password: !vault |
 
 uwsgi_addr: 127.0.0.1:5000
 localhost: http://127.0.0.1
+backup_ip: 192.168.42.156
 
 dns_forwarders:
   - 1.1.1.1
@@ -19,24 +20,27 @@ dns_forwarders:
 allowed_networks:     
   - 192.168.42.0/24 
   - 127.0.0.0/8
+  - 172.17.0.0/16
 
-domain: covid20
-top_level_domain: .io.
+top_level_domain: .io
+domain_name: covid20
+mail_subdomain: mail
+domain_database: db.main
 
 
-prometheus_jobs:
-  - name: node
-    targets: "{{ groups['all'] }}"
+prometheus_exporters:
+  node:
     port: 9100
-  - name: bind
-    targets: "{{ groups['dns_server'] }}"
-    port: 9119
-  - name: mysql
-    targets: "{{ groups['db_servers'] }}"
-    port: 9104
-  - name: nginx
-    targets: "{{ groups['web_servers'] }}"
+
+  nginx:
     port: 9113
+
+  mysql:
+    port: 9104
+
+  bind:
+    port: 9119
+prometheus_port: 9090
 
 
 mysql_exporter_pass: !vault |
@@ -48,7 +52,7 @@ mysql_exporter_pass: !vault |
           3162
 mysql_exporter_user: exporter
 
-backup_ip: 192.168.42.156
+
 
 mysql_backup_user: backup
 mysql_backup_pass: !vault |
@@ -78,6 +82,39 @@ keepalived_exporter_port: 9165
 agama_container_per_vm: 1
 
 
+keepalived_weight: 20
+keepalived_master_priority: 110
+keepalived_slave_priority: 100
 
+local_network: 192.168.100.0/24
+network_prefix: 192.168.100
 
+dns_transfer_key_name: transfer.key
+dns_transfer_key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61653966666338323635316563373838643430643635616335363933633664666337316330646332
+          6164396130373464363066373462353832626233366138630a336237396437366437626465666534
+          33343739303565396538363864633039346661326663306436303062626139653666643931396133
+          6562623261303962330a313661323761613834366533636630323861636331323262333836643634
+          38373437313633323531653739663266363139326338363163653538393535613636616566303966
+          6537353030656539313661333135333530646264613332666132
 
+dns_update_key_name: nsupdate.key
+dns_update_key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          31393634323332633136336230616538633565613563333238636663626236663165316131316461
+          3639613361336463626563346431333039643262616638640a313431366635646161333132363334
+          64393063383134383961346435323964386363663037366431633262366337376263333732383462
+          6136653866366434330a666432613035343431613762323138343732373961653833353531656662
+          62346530336566366163663735636139616266643237303836666131663566333263303561633137
+          6338616239623137666135643638346139333837393030376633
+
+a_records:
+  - subdomain: backup
+    ip: 192.168.42.156
+
+dns_cnames:
+  - cname: influxdb
+    real: "{{ groups['influxdb'][0] }}"
+  - cname: prometheus
+    real: "{{ groups['prometheus'][0] }}"

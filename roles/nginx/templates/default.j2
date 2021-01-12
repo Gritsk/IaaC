@@ -1,68 +1,95 @@
+#Refactor, new configuration after Lab 7 - Grafana
+
 server {
 	listen 80 default_server;
-	listen [::]:80 default_server;
+        listen [::]:80 default_server;
 	listen 8080 default_server;
-    listen [::]:8080 default_server;
+        listen [::]:8080 default_server;
 
 	server_name _;
 
+	{% if inventory_hostname in groups['internal'] %}
+        #Updated index.html for the Nginx on the management system
 
-	{% if inventory_hostname in groups['app_servers'] %}
-	location / {
-		proxy_pass http://127.0.0.1:{{ docker_agama_port }};
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+        {% endif %}
 
+        {% if inventory_hostname in groups['app_servers'] %}
+        #Reverse proxy for Agama application
+
+        location / {
+        	proxy_pass http://localhost:{{ docker_agama_port }};
+        	proxy_set_header Host $http_host;
+		#include uwsgi_params;
+                #uwsgi_pass IP_address:Port
+                #uwsgi_pass unix:/opt/agama/agama.sock;
 	}
-	{% endif %}
-	{% if inventory_hostname in groups['node_exporters'] %}
-    location /metrics {
-		proxy_pass http://127.0.0.1:9100/metrics;
-	}
-	{% endif %}
+        {% endif %}
 
-	{% if inventory_hostname in groups['web_servers'] %}
-    location /nginx-metrics {
-        proxy_pass http://127.0.0.1:9113/metrics;
-    }
-    {% endif %}
+        {% if inventory_hostname in groups['web_servers'] %}
+        #Activate Nginx statistics
 
-	{% if inventory_hostname in groups['db_servers'] %}
-    location /mysql-metrics {
-		proxy_pass http://127.0.0.1:9104/metrics;
-	}
-    {% endif %}
-	{% if inventory_hostname in groups['dns_server'] %} 
-    location /bind-metrics {
-		proxy_pass http://127.0.0.1:9119/metrics;
-	}
-    {% endif %}
-
-    {% if inventory_hostname in groups['prometheus'] %}
-    location /prometheus {
-            proxy_pass http://127.0.0.1:9090;
-    }
-	{% endif %}
-	{% if inventory_hostname in groups['grafana'] %}  
-    location /grafana {
-			#proxy_pass http://127.0.0.1:3000;
-     	    proxy_pass http://127.0.0.1:{{ docker_grafana_port }};
-	}
-    {% endif %}
-
-
-	{% if inventory_hostname in groups['web_servers'] %}
-	location /stub_status {
+        location /stub_status {
                 stub_status;
-    }
-	{% endif %}
+        }
+        {% endif %}
 
 
-	# Reverse proxy HAProxy and keepalived exporter metrics since Lab 13 - HAProxy
+        {% if inventory_hostname in groups['node_exporters'] %}
+        #Reverse proxy for node exporters
+
+        location /metrics {
+		proxy_pass http://localhost:{{ prometheus_exporters['node']['port'] }}/metrics;
+	}
+        {% endif %}
+
+        {% if inventory_hostname in groups['web_servers'] %}
+        #Reverse proxy for Nginx exporter
+
+        location /nginx-metrics {
+                proxy_pass http://localhost:{{ prometheus_exporters['nginx']['port'] }}/metrics;
+        }
+        {% endif %}
+
+        {% if inventory_hostname in groups['db_servers'] %}
+        #Reverse proxy for MySQL exporter
+
+        location /mysql-metrics {
+		proxy_pass http://localhost:{{ prometheus_exporters['mysql']['port'] }}/metrics;
+	}
+        {% endif %}
+
+        {% if inventory_hostname in groups['dns_servers'] %}
+        #Reverse proxy for Bind exporter
+
+        location /bind-metrics {
+		proxy_pass http://localhost:{{ prometheus_exporters['bind']['port'] }}/metrics;
+	}
+        {% endif %}
+
+        {% if inventory_hostname in groups['prometheus'] %}
+        #Reverse proxy for Prometheus
+
+        location /prometheus {
+                proxy_pass http://localhost:{{ prometheus_port }};
+        }
+        {% endif %}
+
+        {% if inventory_hostname in groups['grafana'] %}
+        #Reverse proxy for Grafana
+
+        location /grafana {
+     	        proxy_pass http://localhost:{{ docker_grafana_port }};
+	}
+        {% endif %}
+
       
         {% if inventory_hostname in groups['haproxy'] %}
         #Reverse proxy for HAProxy exporter
 
         location /haproxy-metrics {
-     	        proxy_pass http://127.0.0.1:{{ docker_haproxy_exporter_port }}/metrics;
+     	        proxy_pass http://localhost:{{ docker_haproxy_exporter_port }}/metrics;
 	}
         {% endif %}
         
@@ -70,7 +97,7 @@ server {
         #Reverse proxy for keepalived exporter
 
         location /keepalived-metrics {
-     	        proxy_pass http://127.0.0.1:{{ keepalived_exporter_port }}/metrics;
+     	        proxy_pass http://localhost:{{ keepalived_exporter_port }}/metrics;
 	}
         {% endif %}
         
@@ -78,11 +105,7 @@ server {
         #Reverse proxy for HAProxy
 
         location /haproxy {
-     	        proxy_pass http://127.0.0.1:{{ haproxy_port }}/haproxy?stats;
+     	        proxy_pass http://localhost:{{ haproxy_port }}/haproxy?stats;
 	}
         {% endif %}
-
-
-
 }
-

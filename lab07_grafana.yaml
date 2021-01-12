@@ -1,31 +1,41 @@
 ---
-- name: set up bind bind_exporter
-  hosts: dns_server
-  gather_facts: no
+- name: Reconfigure Nginx servers
+  hosts: web_servers
+  gather_facts: false
+  become: yes
+  roles:
+    - nginx
+
+- name: Reconfigure Prometheus
+  hosts: prometheus
+  gather_facts: false
+  become: yes
+  roles:
+    - prometheus
+
+- name: Reconfigure Bind9
+  hosts: dns_servers
+  gather_facts: false
+  become: yes
+  roles:
+    - bind
+
+- name: Install Nginx exporter
+  hosts: all
+  become: yes
+  roles:
+    - nginx_exporter
+ 
+- name: Install Bind exporter
+  hosts: dns_servers
+  gather_facts: false
   become: yes
   roles:
     - bind_exporter
-- name: set up mysqls bind_exporter
+ 
+- name: Install MySQL exporter
   hosts: db_servers
+  gather_facts: false
   become: yes
-  gather_facts: no
   roles:
     - mysql_exporter
-  tags:
-    - mysql
-- name: nginx exporter
-  hosts: all
-  become: yes
-  gather_facts: no
-  roles:
-    - nginx_exporter
-  tags: 
-    - nginx
-- name: set up grafana
-  hosts: grafana
-  become: yes
-  gather_facts: no
-  roles:
-    - grafana
-  tags:
-    - grafana

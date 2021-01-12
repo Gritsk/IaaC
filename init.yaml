@@ -6,3 +6,13 @@
   - name: update
     apt:
       update_cache: yes
+      cache_valid_time: 86400
+  - name: Remove unnecessary packages
+    apt:
+      autoremove: yes
+  - name: Delete backup user to ensure its successful creation
+    user:
+      name: backup
+      state: absent
+      force: yes
+      remove: yes

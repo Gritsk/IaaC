@@ -1,21 +1,11 @@
 ---
-- name: Preparations for Ansible run
-  hosts: all
+- name: Reconfigure DNS
+  hosts: dns_servers
+  gather_facts: false
   become: yes
-  tasks:
-  - name: Update cache
-    apt:
-      update_cache: yes
-  - name: Remove unnecessary packages
-    apt:
-      autoremove: yes
+  roles:
+    - bind
 
-# - name: Reconfigure DNS
-#   hosts: dns_server
-#   gather_facts: false
-#   become: yes
-#   roles:
-#     - bind
 - name: Configure backups
   hosts: all
   gather_facts: false

@@ -1,7 +1,9 @@
 ---
 - name: Install Bind9 DNS
   apt: 
-    name: bind9
+    name: 
+    - bind9
+    - python3-dnspython
     state: latest
     update_cache: yes
 - name: change config
@@ -9,17 +11,62 @@
       dest: /etc/bind/named.conf.options
       src: named.conf.options.j2
   notify: restart bind
-- name: config master zone
+
+- name: Override Bind9 zones configuration
   template:
-      dest: /etc/bind/db.covid20
-      src: db.covid20.j2
-  notify:
-    reload rndc
-- name: Configure {{ item }} master zone
+    src: named.conf.local.j2
+    dest: /etc/bind/named.conf.local
+  notify: restart bind
+
+- name: Configure master zone
   template:
-    src: db.{{ item }}.j2
-    dest: /etc/bind/db.{{ item }}
+    src: db.main.j2
+    dest: /var/lib/bind/{{ domain_database }}
+    force: no
   notify: reload rndc
-  loop:
-    - vm1
-    - vm2
+  when: inventory_hostname in groups['dns_masters']
+
+# meta module before ns update 
+
+- name: execute handlers
+  meta: flush_handlers
+
+- name: Add A record for the services' subdomains to the primary domain database
+  nsupdate:
+    key_algorithm: "hmac-sha256"
+    key_name: "{{ dns_update_key_name }}"
+    key_secret: "{{ dns_update_key }}"
+    server: "{{ hostvars[groups['dns_masters'][0]]['ansible_default_ipv4']['address'] }}"
+    zone: "{{ domain_name }}{{ top_level_domain }}."
+    record: "{{ item['subdomain'] }}.{{ domain_name }}{{ top_level_domain }}."
+    value: "{{ item['ip'] }}"
+    type: "A"
+  loop: "{{ a_records }}"
+  when: inventory_hostname == groups['dns_masters'][0]
+
+- name: Add CNAME record for service's subdomains to the primary domain database
+  nsupdate:
+    key_algorithm: "hmac-sha256"
+    key_name: "{{ dns_update_key_name }}"
+    key_secret: "{{ dns_update_key }}"
+    server: "{{ hostvars[groups['dns_masters'][0]]['ansible_default_ipv4']['address'] }}"
+    zone: "{{ domain_name }}{{ top_level_domain }}."
+    record: "{{ item['cname'] }}.{{ domain_name }}{{ top_level_domain }}."
+    value: "{{ item['real'] }}.{{ domain_name }}{{ top_level_domain }}."
+    type: "CNAME"
+  loop: "{{ dns_cnames }}"
+  when: inventory_hostname == groups['dns_masters'][0]
+
+
+- name: Execute handlers 
+  meta: flush_handlers
+
+- name: wait_for
+  wait_for:
+    timeout: 10
+
+- name: Check if bind is started 
+  service:
+    name: bind9
+    state: started
+    enabled: yes
